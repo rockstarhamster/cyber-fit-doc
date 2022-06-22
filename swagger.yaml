@@ -42,7 +42,7 @@ paths:
         description: "Workout object"
         required: true
         schema:
-          $ref: "#/definitions/Workout"
+          $ref: "#/definitions/WorkoutPost"
       responses:
         "201":
           description: "Created"
@@ -73,7 +73,7 @@ paths:
         description: "Workout object"
         required: true
         schema:
-          $ref: "#/definitions/Workout"
+          $ref: "#/definitions/WorkoutPut"
       responses:
         "200":
           description: "Updated"
@@ -97,12 +97,21 @@ definitions:
       name:
         type: "string"
   Workout:
+    allOf:
+      - $ref: '#/definitions/WorkoutBase'
+      - type: "object"
+        properties:
+          id:
+            type: "string"
+            format: "uuid"
+            readOnly: true
+          exercises:
+            type: "array"
+            items:
+              $ref: '#/definitions/Exercise'
+  WorkoutBase:
     type: "object"
     properties:
-      id:
-        type: "string"
-        format: "uuid"
-        readOnly: true
       title:
         type: "string"
       date:
@@ -111,13 +120,23 @@ definitions:
       exercises:
         type: "array"
         items:
-          $ref: '#/definitions/Exercise'
-  Exercise:
+          $ref: '#/definitions/ExerciseBase'
+  WorkoutPost:
+    allOf:
+      - $ref: '#/definitions/WorkoutBase'
+      - type: "object"
+  WorkoutPut:
+    allOf:
+      - $ref: '#/definitions/WorkoutBase'
+      - type: "object"
+        properties:
+          exercises:
+            type: "array"
+            items:
+              $ref: '#/definitions/ExercisePut'
+  ExerciseBase:
     type: "object"
     properties:
-      id:
-        type: "string"
-        format: "uuid"
       title:
         type: "string"
       weight:
@@ -135,6 +154,22 @@ definitions:
         type: "array"
         items:
           $ref: '#/definitions/Warmup'
+  Exercise:
+    allOf:
+      - $ref: '#/definitions/ExerciseBase'
+      - type: "object"
+        properties:
+          id:
+            type: "string"
+            format: "uuid"
+  ExercisePut:
+    allOf:
+      - $ref: '#/definitions/ExerciseBase'
+      - type: "object"
+        properties:
+          id:
+            type: "string"
+            format: "uuid"
   Warmup:
     type: "object"
     properties:
